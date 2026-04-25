@@ -1,0 +1,15 @@
+<div class="min-h-screen grid grid-cols-1 md:grid-cols-2">
+
+  <!-- Panel izquierdo (marca) -->
+  <div class="hidden md:block">
+    <ng-content select="[brand]" />
+  </div>
+
+  <!-- Panel derecho (formulario) -->
+  <div class="flex items-center justify-center p-8 md:p-16 bg-white">
+    <div class="w-full max-w-md">
+      <ng-content select="[form]" />
+    </div>
+  </div>
+
+</div>
