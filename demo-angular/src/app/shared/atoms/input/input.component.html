@@ -1,0 +1,19 @@
+<div class="relative flex items-center">
+  <!-- Ícono izquierdo -->
+  <span *ngIf="icon"
+    class="absolute left-4 text-gray-400 select-none pointer-events-none text-sm">
+    {{ icon }}
+  </span>
+
+  <input
+    [type]="inputType"
+    [placeholder]="placeholder"
+    [value]="value" 
+    (input)="onInput($event)"
+    (blur)="onTouched()"
+    class="w-full bg-gray-100 rounded-xl px-4 py-3.5 text-sm text-gray-800
+           placeholder-gray-400 outline-none border border-transparent
+           focus:border-brand-orange focus:bg-white transition-all duration-200"
+    [class.pl-10]="icon"
+  />
+</div>
