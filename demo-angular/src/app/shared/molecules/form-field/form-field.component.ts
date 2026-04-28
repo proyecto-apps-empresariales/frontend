@@ -16,6 +16,5 @@ export class FormFieldComponent {
   @Input() type: string = 'text';
   @Input() placeholder: string = '';
   @Input() icon: string = '';
-  @Input() showToggle: boolean = false;
   @Input() control!: FormControl;
 }
