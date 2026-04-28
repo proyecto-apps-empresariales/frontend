@@ -15,22 +15,14 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ]
 })
 export class InputComponent implements ControlValueAccessor {
-  //Parametros
 
+  //Parametros
   @Input() type: string = 'text';
   @Input() placeholder: string = '';
   @Input() icon: string = ''; // emoji o texto SVG
-  @Input() showToggle: boolean = false; // para contraseñas
+
 
   value: string = '';
-  showPassword: boolean = false;
-
-  //Funcionar que determina el type
-  get inputType(): string {
-    if (this.type === 'password')
-      return this.showPassword ? 'text' : 'password';
-    return this.type;
-  }
 
   onChange = (_: any) => {};
   onTouched = () => {};
@@ -44,4 +36,5 @@ export class InputComponent implements ControlValueAccessor {
   this.value = (event.target as HTMLInputElement).value;
   this.onChange(this.value);
 }
+
 }
