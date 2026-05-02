@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormFieldComponent } from "../../molecules/form-field/form-field.component";
-import { ButtonComponent } from "../../atoms/button/button.component";
+import { ButtonComponent } from "../../atoms/yellow button/button.component";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({

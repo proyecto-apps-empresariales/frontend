@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from '../../atoms/button/button.component';
+import { ButtonComponent } from '../../atoms/yellow button/button.component';
 import { FormFieldComponent } from '../../molecules/form-field/form-field.component';
 
 @Component({

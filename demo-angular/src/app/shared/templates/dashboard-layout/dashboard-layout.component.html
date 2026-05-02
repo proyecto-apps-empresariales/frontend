@@ -1,0 +1,10 @@
+<div class="flex h-screen overflow-hidden">
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <app-header  [placeholder]="placeholder"></app-header>
+    <div class="flex-1 overflow-y-auto p-7 bg-slate-50 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-200">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

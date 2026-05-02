@@ -1,0 +1,23 @@
+<div class="flex items-center justify-between px-5 py-4">
+  <span class="text-[12.5px] text-slate-400">Mostrando {{ showing }} de {{ totalDocs | number }}</span>
+
+  <div class="flex items-center gap-1">
+    <button
+      class="w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 text-[13px] font-medium flex items-center justify-center hover:bg-slate-50 hover:border-slate-300 transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed font-[family-name:var(--font-display)]"
+      [disabled]="current === 1"
+    >‹</button>
+
+    <button
+      *ngFor="let p of pages"
+      class="w-8 h-8 rounded-lg border text-[13px] font-medium flex items-center justify-center transition-all duration-150 font-[family-name:var(--font-display)]"
+      [ngClass]="p === current
+        ? 'bg-[#1a1f36] text-white border-[#1a1f36] font-bold'
+        : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:border-slate-300'"
+    >{{ p }}</button>
+
+    <span class="text-slate-400 text-[13px] px-1">...</span>
+
+    <button class="w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 text-[13px] font-medium flex items-center justify-center hover:bg-slate-50 transition-all duration-150 font-[family-name:var(--font-display)]">{{ total }}</button>
+    <button class="w-8 h-8 rounded-lg border border-slate-200 bg-white text-slate-500 text-[13px] font-medium flex items-center justify-center hover:bg-slate-50 transition-all duration-150 font-[family-name:var(--font-display)]">›</button>
+  </div>
+</div>

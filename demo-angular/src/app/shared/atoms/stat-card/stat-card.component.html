@@ -1,0 +1,28 @@
+<div class="bg-white rounded-2xl p-5 shadow-[0_1px_3px_rgba(0,0,0,.06),0_4px_16px_rgba(0,0,0,.04)] flex items-start gap-4 transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,.10)] hover:-translate-y-0.5 cursor-default">
+
+  <div
+    *ngIf="icon"
+    class="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
+    [ngClass]="{
+      'bg-amber-50 text-amber-500': variant === 'accent',
+      'bg-blue-50 text-blue-500':   variant === 'primary',
+      'bg-slate-100 text-slate-500': variant === 'default'
+    }"
+  >{{ icon }}</div>
+
+  <div class="flex-1 min-w-0">
+    <p class="text-[10px] uppercase tracking-[0.8px] text-slate-400 font-bold mb-1.5 font-[family-name:var(--font-display)]">{{ label }}</p>
+
+    <div class="flex items-baseline gap-2">
+      <h2 class="font-[family-name:var(--font-display)] text-[28px] font-extrabold text-slate-800 leading-none">{{ value | number }}</h2>
+      <span *ngIf="growth" class="text-xs font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">↑{{ growth }}%</span>
+    </div>
+
+    <div *ngIf="extraRows.length" class="flex gap-4 mt-2.5">
+      <span *ngFor="let row of extraRows" class="flex flex-col gap-0.5">
+        <span class="text-[9px] text-slate-400 uppercase tracking-[0.5px] font-bold">{{ row.label }}</span>
+        <span class="text-[13px] font-bold text-slate-500 font-[family-name:var(--font-display)]">{{ row.value | number }}</span>
+      </span>
+    </div>
+  </div>
+</div>
