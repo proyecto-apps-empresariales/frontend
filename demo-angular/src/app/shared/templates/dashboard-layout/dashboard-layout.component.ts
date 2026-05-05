@@ -13,4 +13,5 @@ import { HeaderComponent } from '../../organisms/header/header.component';
 })
 export class DashboardLayoutComponent {
   @Input() placeholder = 'Buscar...';
+  @Input() tabs: { label: string; path: string }[] = [];
 }

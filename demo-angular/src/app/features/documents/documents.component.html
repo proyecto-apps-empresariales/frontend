@@ -1,4 +1,4 @@
-<app-dashboard-layout placeholder="Buscar documentos...">
+<app-dashboard-layout placeholder="Buscar documentos..." [tabs]="tabs">
   <div class="flex flex-col gap-6 animate-[fadeIn_0.3s_ease]">
 
     <!-- Hero -->
@@ -8,7 +8,7 @@
         <p class="text-[13.5px] text-slate-500">Gestione y supervise el flujo documental de su organización.</p>
       </div>
       <div class="flex items-center gap-2 shrink-0">
-        <app-button>+ Crear documento</app-button>
+        <app-button (click)="goToCreate()">+ Crear documento</app-button>
         <app-button>≡ Filtrar</app-button>
 
       </div>
@@ -18,7 +18,7 @@
     <app-stats-overview [stats]="stats"></app-stats-overview>
 
     <!-- Table -->
-    <app-documents-table [documents]="documents" [total]="stats.total"></app-documents-table>
+    <app-documents-table [items]="documents" [total]="stats.total" title="Documentos recientes"></app-documents-table>
 
   </div>
 </app-dashboard-layout>

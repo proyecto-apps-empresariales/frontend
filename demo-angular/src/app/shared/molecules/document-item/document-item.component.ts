@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Document } from '../../../core/models/document.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-document-item',
@@ -10,12 +10,48 @@ import { Document } from '../../../core/models/document.model';
   styleUrls: ['./document-item.component.css'],
 })
 export class DocumentItemComponent {
-  @Input() doc!: Document;
+  @Input() doc!: any;
+  @Input() isDocument: boolean = true;
+  typeIcon = '📁';
 
-  get typeIcon(): string {
-    const icons: Record<string, string> = { pdf: '📄', docx: '📝', xlsx: '📊' };
-    return icons[this.doc.type] || '📁';
+  constructor(private router: Router) {}
+
+  previewUrl(): void {
+    // Si es documento, busca la última versión
+    if (this.isDocument) {
+      const versiones = this.doc.versiones ?? [];
+      const ultima = versiones[versiones.length - 1];
+      const url = ultima?.archivoUrl;
+      if (url) window.open(url, '_blank');
+      else console.warn('No hay versiones disponibles');
+    } else {
+      // Si es versión, abre directamente su URL
+      const url = this.doc.archivoUrl;
+      if (url) window.open(url, '_blank');
+      else console.warn('No hay archivo disponible');
+    }
   }
 
-  get typeClass(): string { return this.doc.type; }
+  downloadUrl(): void {
+    const versiones = this.doc.versiones ?? [];
+    const ultima = versiones[versiones.length - 1];
+    let url = ultima?.archivoUrl;
+
+    // Si es versión, descarga directamente su URL
+    if (!url) {
+      url = this.doc.archivoUrl;
+    }
+
+    // Agrega fl_attachment a la URL de Cloudinary para forzar descarga
+    const downloadUrl = url.replace('/upload/', '/upload/fl_attachment/');
+
+    window.open(downloadUrl, '_blank');
+  }
+
+  goToVersion() {
+    console.log('doc:', this.doc);
+    this.router.navigate(['/versiondocuments'], {
+      state: { document: this.doc },
+    });
+  }
 }

@@ -1,0 +1,28 @@
+<div class="flex flex-col gap-1.5">
+  <label class="text-xs font-semibold tracking-widest text-gray-500 uppercase">
+    {{ label }}
+  </label>
+
+  @if (isLoading) {
+    <div class="h-[52px] bg-gray-100 rounded-xl animate-pulse"></div>
+  }
+
+  @if (hasError && !isLoading) {
+    <div class="flex items-center justify-between bg-red-50 border border-red-200 rounded-xl px-4 py-3.5 text-sm text-red-500">
+      <span>No se pudieron cargar las opciones</span>
+      <button (click)="retry()" class="text-xs font-semibold underline hover:text-red-700 transition-colors">
+        Reintentar
+      </button>
+    </div>
+  }
+
+  <!-- ← siempre presente, solo oculto visualmente mientras carga -->
+  <div [class.hidden]="isLoading || hasError">
+    <app-dropdown-field
+      [options]="options"
+      [placeholder]="placeholder"
+      [icon]="icon"
+      [formControl]="internalControl"
+    />
+  </div>
+</div>

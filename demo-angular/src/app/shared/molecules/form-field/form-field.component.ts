@@ -17,4 +17,5 @@ export class FormFieldComponent {
   @Input() placeholder: string = '';
   @Input() icon: string = '';
   @Input() control!: FormControl;
+  @Input() value!: string;
 }

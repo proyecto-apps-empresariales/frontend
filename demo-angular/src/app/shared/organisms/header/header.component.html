@@ -4,15 +4,14 @@
     <button
       *ngFor="let tab of tabs"
       class="relative h-full px-4 font-[family-name:var(--font-display)] text-[13.5px] font-medium transition-colors duration-150 cursor-pointer bg-transparent border-none whitespace-nowrap"
-      [class.text-slate-800]="tab === activeTab"
-      [class.font-bold]="tab === activeTab"
-      [class.text-slate-400]="tab !== activeTab"
-      [class.hover:text-slate-700]="tab !== activeTab"
+      [class.text-slate-800]="tab.label === activeTab"
+      [class.font-bold]="tab.label === activeTab"
+      [class.text-slate-400]="tab.label !== activeTab"
       (click)="setTab(tab)"
     >
-      {{ tab }}
+      {{ tab.label }}
       <span
-        *ngIf="tab === activeTab"
+        *ngIf="tab.label === activeTab"
         class="absolute bottom-0 left-4 right-4 h-0.5 bg-[#f5a623] rounded-t"
       ></span>
     </button>
