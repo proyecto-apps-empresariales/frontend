@@ -1,0 +1,10 @@
+<div class="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-3.5 py-2 min-w-[220px] transition-all duration-150 focus-within:border-[#f5a623] focus-within:shadow-[0_0_0_3px_rgba(245,166,35,0.12)]">
+  <span class="text-[13px] text-slate-400">🔍</span>
+  <input
+    class="border-none outline-none bg-transparent font-[family-name:var(--font-body)] text-[13px] text-slate-800 w-full placeholder:text-slate-400"
+    type="text"
+    [placeholder]="placeholder"
+    [(ngModel)]="query"
+    (keyup.enter)="onSearch()"
+  />
+</div>

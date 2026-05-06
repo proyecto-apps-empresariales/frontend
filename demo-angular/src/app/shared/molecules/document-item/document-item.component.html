@@ -1,0 +1,56 @@
+<div
+  class="flex items-center gap-4 px-5 py-3.5 bg-white transition-all duration-150 hover:shadow-[0_4px_12px_rgba(0,0,0,.08)] hover:-translate-y-px cursor-pointer group"
+>
+  <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
+    {{ typeIcon }}
+  </div>
+
+  <div class="flex-1 min-w-0">
+    <p
+      class="font-semibold text-[13.5px] text-slate-800 font-[family-name:var(--font-display)] whitespace-nowrap overflow-hidden text-ellipsis mb-1"
+    >
+      {{ doc.nombre }}
+    </p>
+    <div class="flex items-center gap-3 flex-wrap">
+      <span class="text-[11.5px] text-slate-400"
+        >📅 {{ doc.fechaCreacion || doc.fechaActualizacion }}</span
+      >
+    </div>
+  </div>
+
+  <div class="flex flex-col items-end gap-0.5 flex-shrink-0 min-w-[100px]">
+    <span class="text-[9px] font-bold uppercase tracking-[0.8px] text-slate-400">Responsable</span>
+    <span
+      class="text-[12.5px] font-semibold text-slate-800 font-[family-name:var(--font-display)]"
+      >{{ doc.usuarioCreador || doc.usuarioActualizador }}</span
+    >
+  </div>
+
+  <div class="flex items-center gap-1 flex-shrink-0">
+    <button
+      class="w-8 h-8 rounded-lg flex items-center justify-center text-[15px] text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+      title="Ver"
+      (click)="previewUrl()"
+    >
+      👁
+    </button>
+
+    <button
+      class="w-8 h-8 rounded-lg flex items-center justify-center text-[15px] text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+      title="Descargar"
+      (click)="downloadUrl()"
+    >
+      ⬇
+    </button>
+
+    @if (isDocument) {
+      <button
+        class="w-8 h-8 rounded-lg flex items-center justify-center text-xl font-bold text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+        title="Añadir version"
+        (click)="goToVersion()"
+      >
+        ➕
+      </button>
+    }
+  </div>
+</div>

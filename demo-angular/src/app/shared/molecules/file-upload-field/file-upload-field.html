@@ -1,0 +1,34 @@
+<div class="flex flex-col gap-1.5">
+
+  <!-- Label — igual que form-field -->
+  <label class="text-xs font-semibold tracking-widest text-gray-500 uppercase">
+    {{ label }}
+  </label>
+
+  <!-- Drop zone atom -->
+  <app-file-field
+    [accept]="accept"
+    [multiple]="multiple"
+    (filesDropped)="onFilesDropped($event)"
+  />
+
+  <!-- Lista de archivos seleccionados -->
+  <ul *ngIf="files.length" class="flex flex-col gap-2 mt-1">
+    <li
+      *ngFor="let file of files; let i = index"
+      class="flex items-center justify-between bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm"
+    >
+      <div class="flex items-center gap-2 truncate">
+        <span class="text-base">📄</span>
+        <span class="text-gray-700 font-medium truncate">{{ file.name }}</span>
+        <span class="text-gray-400 text-xs shrink-0">{{ formatSize(file.size) }}</span>
+      </div>
+      <button
+        (click)="removeFile(i)"
+        class="ml-3 text-gray-400 hover:text-red-500 transition-colors shrink-0 text-lg leading-none"
+        title="Eliminar"
+      >×</button>
+    </li>
+  </ul>
+
+</div>
