@@ -1,0 +1,19 @@
+<app-dashboard-layout placeholder="Buscar tipos de documento..." [tabs]="tabs">
+  <div class="flex flex-col gap-6 animate-[fadeIn_0.3s_ease]">
+
+    <!-- Hero -->
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="font-(family-name:var(--font-display)) text-[26px] font-extrabold text-slate-800 tracking-tight mb-1">Panel de Tipos de Documentos</h1>
+       <p class="text-[13.5px] text-slate-500">Gestione y supervise los tipos de documentos de su organizacion.</p>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <app-button (click)="goToCreate()">+ Crear tipo de documento</app-button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <app-documents-table [isType]="true" [isDocument]="false" title="Tipos de Documentos" [items]="documentsType" [total]="documentsType.length" [columns]="documentColumns"></app-documents-table>
+
+  </div>
+</app-dashboard-layout>

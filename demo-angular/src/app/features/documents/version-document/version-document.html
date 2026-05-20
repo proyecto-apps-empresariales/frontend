@@ -18,7 +18,7 @@
       [formControl]="documentControl"
     />
     <app-form-field label="Descripción" [control]="descripcionControl"></app-form-field>
-    <app-documents-table [isDocument]="false" title="Versiones" [items]="versions" [total]="versions.length" [columns]="versionColumns"></app-documents-table>
+    <app-documents-table [isVersion]="true" [isDocument]="false" title="Versiones" [items]="versions" [total]="versions.length" [columns]="versionColumns"></app-documents-table>
   
     <app-file-field label="Archivo" accept=".pdf,.doc,.docx" [multiple]="false" (filesDropped)="onFileSelected($event)"></app-file-field>
 

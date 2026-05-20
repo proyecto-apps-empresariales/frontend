@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
 import { DashboardLayoutComponent } from '../../../shared/templates/dashboard-layout/dashboard-layout.component';
 import { ButtonComponent } from '../../../shared/atoms/yellow button/button.component';
 import {
   CreateDocumentVersion,
   DocumentVersion,
   ResponseDocument,
-} from '../../../core/models/document.model';
+} from '../../../core/models/admin.model';
 import { FileField } from '../../../shared/atoms/file-field/file-field';
 import { DropdownFieldLabel } from '../../../shared/molecules/dropdown-field-label/dropdown-field-label';
 import { DocumentService } from '../../../core/services/document.service';
@@ -19,6 +19,7 @@ import { VersionService } from '../../../core/services/version-document.service'
 import { Router } from '@angular/router';
 import { FormFieldComponent } from '../../../shared/molecules/form-field/form-field.component';
 import { UploadService } from '../../../core/services/upload.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-version-document',
@@ -59,6 +60,7 @@ export class VersionDocument implements OnInit {
     { header: 'Archivo', field: 'archivoUrl' },
   ];
 
+  private authService = inject(AuthService);
   constructor(
     private docService: DocumentService,
     private versionService: VersionService,
@@ -94,7 +96,6 @@ ngOnInit() {
   });
 
   this.tabs = [
-    { label: 'docuCMB',   path: '/docucmb' },
     { label: 'Explorar',  path: '/documents' },
     { label: 'Crear',     path: '/createdocuments' },
     { label: 'Versiones', path: '/versiondocuments' },
@@ -107,6 +108,8 @@ ngOnInit() {
 
   //Agregar version al documento seleccionado
   submit() {
+    const user= this.authService.getCurrentUser();
+
     if (!this.document) {
       console.error('Selecciona un documento');
       return;
@@ -121,7 +124,7 @@ ngOnInit() {
     this.uploadService.uploadFile(this.selectedFile).subscribe({
       next: (archivoUrl) => {
         const payload: CreateDocumentVersion = {
-          usuarioActualizador: 'camila@correo.com',
+          usuarioActualizador: user!.correo,
           documento: this.document!.nombre,
           descripcion: this.descripcionControl.value ?? '',
           fechaActualizacion: new Date().toISOString().split('T')[0],

@@ -1,0 +1,23 @@
+<app-dashboard-layout placeholder="Buscar organizaciones..." [tabs]="tabs">
+  <div class="flex flex-col gap-6 animate-[fadeIn_0.3s_ease]">
+
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="font-(family-name:var(--font-display)) text-[26px] font-extrabold text-slate-800 tracking-tight mb-1">
+          {{ existing ? 'Editar Organización' : 'Crear Organización' }}
+        </h1>
+        <p class="text-[13.5px] text-slate-500">
+          {{ existing ? 'Modifica los datos de la organización.' : 'Completa los campos para crear una organización.' }}
+        </p>
+      </div>
+    </div>
+
+    <app-form-field label="Nombre" placeholder="Nombre de la organización" icon="🏢" [control]="nombreControl" />
+    <app-form-field label="Descripción" placeholder="Descripción de la organización" icon="📄" [control]="descripcionControl" />
+
+    <app-button type="submit" (click)="submit()">
+      {{ existing ? 'Guardar cambios' : '+ Crear organización' }}
+    </app-button>
+
+  </div>
+</app-dashboard-layout>

@@ -1,0 +1,161 @@
+<app-dashboard-layout placeholder="Buscar usuarios..." [tabs]="tabs">
+  <div class="flex flex-col gap-6 animate-[fadeIn_0.3s_ease]">
+
+    <!-- ── Encabezado ─────────────────────────────────────────────────── -->
+    <div class="flex items-center gap-4">
+      <!-- Avatar con iniciales -->
+      <div class="w-14 h-14 rounded-full bg-yellow-400 flex items-center justify-center
+                  text-xl font-extrabold text-white shadow-md select-none shrink-0">
+        {{ user ? (user.nombre[0] + user.apellido[0]) : '?' }}
+      </div>
+
+      <div>
+        <h1 class="font-(family-name:var(--font-display)) text-[26px] font-extrabold
+                   text-slate-800 tracking-tight mb-0.5">
+          Mi Perfil
+        </h1>
+        <p class="text-[13.5px] text-slate-500">
+          {{ user?.nombre }} {{ user?.apellido }} &nbsp;·&nbsp; {{ user?.correo }}
+        </p>
+      </div>
+    </div>
+
+    <!-- ── Tabs internos ──────────────────────────────────────────────── -->
+    <div class="flex gap-1 border-b border-slate-200 pb-0">
+      <button
+        (click)="setTab('profile')"
+        [class]="activeTab === 'profile'
+          ? 'px-4 py-2 text-[13px] font-semibold border-b-2 border-yellow-400 text-slate-800 -mb-px'
+          : 'px-4 py-2 text-[13px] font-medium text-slate-400 hover:text-slate-600 -mb-px transition-colors'"
+      >
+        👤 Datos personales
+      </button>
+      <button
+        (click)="setTab('password')"
+        [class]="activeTab === 'password'
+          ? 'px-4 py-2 text-[13px] font-semibold border-b-2 border-yellow-400 text-slate-800 -mb-px'
+          : 'px-4 py-2 text-[13px] font-medium text-slate-400 hover:text-slate-600 -mb-px transition-colors'"
+      >
+        🔒 Cambiar contraseña
+      </button>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         TAB: Datos personales
+    ══════════════════════════════════════════════════════════════════════ -->
+    @if (activeTab === 'profile') {
+
+      <!-- Campos de solo lectura (referencia) -->
+      <div class="rounded-xl bg-slate-50 border border-slate-200 p-4 flex flex-col gap-1.5">
+        <p class="text-[11.5px] font-semibold text-slate-400 uppercase tracking-widest mb-1">
+          Información de cuenta
+        </p>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-1 text-[13.5px] text-slate-600">
+          <span class="font-medium text-slate-400">Correo</span>
+          <span>{{ user?.correo }}</span>
+
+          <span class="font-medium text-slate-400">Organización</span>
+          <span>{{ user?.nombreOrganizacion ?? '—' }}</span>
+
+          <span class="font-medium text-slate-400">Rol</span>
+          <span>{{ user?.nombreRol ?? '—' }}</span>
+
+          <span class="font-medium text-slate-400">Estado</span>
+          <span [class]="user?.estaActivo ? 'text-green-600 font-semibold' : 'text-red-500 font-semibold'">
+            {{ user?.estaActivo ? 'Activo' : 'Inactivo' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Campos editables -->
+      <div class="grid grid-cols-2 gap-4">
+        <app-form-field
+          label="Nombre"
+          placeholder="Tu nombre"
+          icon="👤"
+          [control]="nombreControl"
+        />
+        <app-form-field
+          label="Apellido"
+          placeholder="Tu apellido"
+          icon="👤"
+          [control]="apellidoControl"
+        />
+      </div>
+
+      <app-form-field
+        label="Celular"
+        placeholder="Número de celular"
+        icon="📱"
+        [control]="celularControl"
+      />
+
+      <!-- Feedback -->
+      @if (profileSuccess) {
+        <div class="rounded-lg bg-green-50 border border-green-200 px-4 py-3
+                    text-[13px] text-green-700 font-medium flex items-center gap-2">
+          ✅ Perfil actualizado correctamente.
+        </div>
+      }
+      @if (profileError) {
+        <div class="rounded-lg bg-red-50 border border-red-200 px-4 py-3
+                    text-[13px] text-red-600 font-medium flex items-center gap-2">
+          ⚠️ {{ profileError }}
+        </div>
+      }
+
+      <app-button type="submit" (click)="submitProfile()">
+        Guardar cambios
+      </app-button>
+    }
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         TAB: Cambiar contraseña
+    ══════════════════════════════════════════════════════════════════════ -->
+    @if (activeTab === 'password') {
+
+      <app-form-field
+        type="password"
+        label="Contraseña actual"
+        placeholder="Ingresa tu contraseña actual"
+        icon="🔓"
+        [control]="contrasenaActualControl"
+      />
+
+      <app-form-field
+        type="password"
+        label="Nueva contraseña"
+        placeholder="Mínimo 3 caracteres"
+        icon="🔒"
+        [control]="contrasenaNuevaControl"
+      />
+
+      <app-form-field
+        type="password"
+        label="Confirmar nueva contraseña"
+        placeholder="Repite la nueva contraseña"
+        icon="🔒"
+        [control]="contrasenaConfirmacionControl"
+      />
+
+      <!-- Feedback -->
+      @if (passwordSuccess) {
+        <div class="rounded-lg bg-green-50 border border-green-200 px-4 py-3
+                    text-[13px] text-green-700 font-medium flex items-center gap-2">
+          ✅ Contraseña actualizada correctamente.
+        </div>
+      }
+      @if (passwordError) {
+        <div class="rounded-lg bg-red-50 border border-red-200 px-4 py-3
+                    text-[13px] text-red-600 font-medium flex items-center gap-2">
+          ⚠️ {{ passwordError }}
+        </div>
+      }
+
+      <app-button type="submit" (click)="submitPassword()">
+        Cambiar contraseña
+      </app-button>
+    }
+
+  </div>
+</app-dashboard-layout>
