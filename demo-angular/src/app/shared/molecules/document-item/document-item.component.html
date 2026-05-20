@@ -9,41 +9,71 @@
     <p
       class="font-semibold text-[13.5px] text-slate-800 font-[family-name:var(--font-display)] whitespace-nowrap overflow-hidden text-ellipsis mb-1"
     >
-      {{ doc.nombre }}
+      {{ doc.nombre || doc.tipoDocumento }}
     </p>
-    <div class="flex items-center gap-3 flex-wrap">
-      <span class="text-[11.5px] text-slate-400"
-        >📅 {{ doc.fechaCreacion || doc.fechaActualizacion }}</span
+    @if (isUser) {
+      <span
+        class="font-semibold text-[13.5px] text-slate-800 font-[family-name:var(--font-display)] whitespace-nowrap overflow-hidden text-ellipsis mb-1"
       >
-    </div>
+        {{ doc.apellido }}
+      </span>
+    }
+
+    @if (isOrganization || isVersion || isDocument || isUser || isProcess) {
+      <div class="flex items-center gap-3 flex-wrap">
+        <span class="text-[11.5px] text-slate-400"
+          >📅 {{ doc.fechaCreacion || doc.fechaActualizacion || doc.fechaFin }}</span
+        >
+      </div>
+    }
   </div>
 
   <div class="flex flex-col items-end gap-0.5 flex-shrink-0 min-w-[100px]">
-    <span class="text-[9px] font-bold uppercase tracking-[0.8px] text-slate-400">Responsable</span>
+    @if (isDocument || isVersion || isProcess) {
+      <span class="text-[9px] font-bold uppercase tracking-[0.8px] text-slate-400"
+        >Responsable</span
+      >
+    }
     <span
       class="text-[12.5px] font-semibold text-slate-800 font-[family-name:var(--font-display)]"
-      >{{ doc.usuarioCreador || doc.usuarioActualizador }}</span
+      >{{ doc.usuarioCreador || doc.usuarioActualizador || doc.remitente }}</span
+    >
+    @if (isProcess) {
+      <span class="text-[9px] font-bold uppercase tracking-[0.8px] text-slate-400"
+        >Destinatario</span
+      >
+    }
+    <span
+      class="text-[12.5px] font-semibold text-slate-800 font-[family-name:var(--font-display)]"
+      >{{ doc.destinatario }}</span
     >
   </div>
 
+  <!-- Template -->
+  @if (isTemplate) {
+    <p class="text-[11.5px] text-slate-600 font-bold">{{ doc.descripcion }}</p>
+  }
+
   <div class="flex items-center gap-1 flex-shrink-0">
-    <button
-      class="w-8 h-8 rounded-lg flex items-center justify-center text-[15px] text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
-      title="Ver"
-      (click)="previewUrl()"
-    >
-      👁
-    </button>
+    @if (isDocument || isVersion || isTemplate) {
+      <button
+        class="w-8 h-8 rounded-lg flex items-center justify-center text-[15px] text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+        title="Ver"
+        (click)="previewUrl()"
+      >
+        👁
+      </button>
 
-    <button
-      class="w-8 h-8 rounded-lg flex items-center justify-center text-[15px] text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
-      title="Descargar"
-      (click)="downloadUrl()"
-    >
-      ⬇
-    </button>
-
-    @if (isDocument) {
+      <button
+        class="w-8 h-8 rounded-lg flex items-center justify-center text-[15px] text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+        title="Descargar"
+        (click)="downloadUrl()"
+      >
+        ⬇
+      </button>
+    }
+    <!-- Document -->
+    @if (isDocument && this.user!.idRol !== 6) {
       <button
         class="w-8 h-8 rounded-lg flex items-center justify-center text-xl font-bold text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
         title="Añadir version"
@@ -51,6 +81,129 @@
       >
         ➕
       </button>
+    }
+    <!-- Document type -->
+    @if (isType || isTypeP) {
+      <div class="flex flex-col">
+        @if (req.length > 0) {
+          <p class="text-[11.5px] text-slate-600 font-bold">Requisitos:</p>
+          @for (re of req; track $index) {
+            <span class="text-[11.5px] text-slate-400">{{ re.nombre || re }}</span>
+          }
+        }
+      </div>
+      <button
+        class="w-8 h-8 rounded-lg flex items-center justify-center text-xl font-bold text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+        title="Editar"
+        (click)="goToUpdate()"
+      >
+        ✏️
+      </button>
+    }
+
+    @if (isProcess) {
+      @if (!this.isViewer) {
+        <button
+          class="w-8 h-8 rounded-lg flex items-center justify-center text-xl font-bold text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+          title="Editar"
+          (click)="goToUpdate()"
+        >
+          ✏️
+        </button>
+      }
+
+      <button
+        class="w-8 h-8 rounded-lg flex items-center justify-center text-xl font-bold text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+        title="Ver detalle"
+        (click)="goToDetail()"
+      >
+        🔍
+      </button>
+    }
+
+    @if (isTemplate && isAdmin) {
+      <button
+        class="w-8 h-8 rounded-lg flex items-center justify-center text-xl font-bold text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+        title="Editar"
+        (click)="goToTemplate()"
+      >
+        ✏️
+      </button>
+    }
+    <!-- User -->
+    @if (isUser) {
+      <div class="flex items-center gap-3">
+        <span class="text-[11.5px] font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg">
+          🏢 {{ doc.nombreOrganizacion }}
+        </span>
+        <span class="text-[11.5px] font-medium text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg">
+          🔑 {{ doc.nombreRol }}
+        </span>
+
+        @if (doc.estaActivo) {
+          <button
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11.5px] font-semibold text-green-700 bg-green-50 hover:bg-green-100 transition-colors duration-150"
+            title="Inactivar usuario"
+            (click)="inactivateUser()"
+          >
+            <span class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
+            Activo
+          </button>
+        } @else {
+          <button
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11.5px] font-semibold text-red-700 bg-red-50 hover:bg-red-100 transition-colors duration-150"
+            title="Activar usuario"
+            (click)="activateUser()"
+          >
+            <span class="w-1.5 h-1.5 rounded-full bg-red-400 inline-block"></span>
+            Inactivo
+          </button>
+        }
+      </div>
+      <button
+        class="w-8 h-8 rounded-lg flex items-center justify-center text-xl font-bold text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+        title="Editar"
+        (click)="goToUpdateUser()"
+      >
+        ✏️
+      </button>
+    }
+
+    @if (isOrganization || isRole) {
+      <div class="flex-1 min-w-0">
+        <p
+          class="font-semibold text-[13.5px] text-slate-800 font-[family-name:var(--font-display)] whitespace-nowrap overflow-hidden text-ellipsis mb-1"
+        >
+          Descripcion:
+        </p>
+        <p
+          class="font-semibold text-[13.5px] text-slate-500 font-[family-name:var(--font-display)] whitespace-nowrap overflow-hidden text-ellipsis mb-1"
+        >
+          {{ doc.descripcion }}
+        </p>
+      </div>
+      <button
+        class="w-8 h-8 rounded-lg flex items-center justify-center ml-2 text-xl font-bold text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+        title="Editar"
+        (click)="goToUpdateRole()"
+      >
+        ✏️
+      </button>
+    }
+
+    @if (isState) {
+      <div class="flex-1 min-w-0">
+        <p
+          class="font-semibold text-[13.5px] text-slate-800 font-[family-name:var(--font-display)] whitespace-nowrap overflow-hidden text-ellipsis mb-1 text-end"
+        >
+          Descripcion:
+        </p>
+        <p
+          class="font-semibold text-[13.5px] text-slate-500 font-[family-name:var(--font-display)] whitespace-nowrap overflow-hidden text-ellipsis mb-1 text-end"
+        >
+          {{ doc.descripcion }}
+        </p>
+      </div>
     }
   </div>
 </div>

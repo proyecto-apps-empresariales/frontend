@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CreateDocumentRequest, DashboardStats, DocumentType, ResponseDocument } from '../models/document.model';
+import { CreateDocumentTypeInterface, DocumentType, ResponseDocument } from '../models/admin.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -10,14 +10,20 @@ export class DocumentTypeService {
 
   constructor(private http: HttpClient) {}
 
+
   // GET/api/tipoDocuments
   getAllTypeDocuments(): Observable<DocumentType[]> {
     return this.http.get<DocumentType[]>(this.url);
   }
 
   //Create type document
-  postTypeDocument(document: CreateDocumentRequest): Observable<ResponseDocument> {
+  postTypeDocument(document: CreateDocumentTypeInterface): Observable<ResponseDocument> {
     return this.http.post<ResponseDocument>(`${this.url}/crear`, document);
+  }
+
+    //Update type document
+  patchTypeDocument(id: number, document: CreateDocumentTypeInterface): Observable<ResponseDocument> {
+    return this.http.patch<ResponseDocument>(`${this.url}/update/${id}`, document);
   }
 
 }

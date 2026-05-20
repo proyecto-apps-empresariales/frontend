@@ -1,0 +1,85 @@
+<app-dashboard-layout placeholder="Buscar usuarios..." [tabs]="tabs">
+  <div class="flex flex-col gap-6 animate-[fadeIn_0.3s_ease]">
+
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="font-(family-name:var(--font-display)) text-[26px] font-extrabold text-slate-800 tracking-tight mb-1">
+          {{ existing ? 'Editar Usuario' : 'Crear Usuario' }}
+        </h1>
+        <p class="text-[13.5px] text-slate-500">
+          {{ existing ? 'Modifica los datos del usuario.' : 'Completa los campos para crear un usuario.' }}
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <app-form-field label="Nombre"   placeholder="Nombre"   icon="👤" [control]="nombreControl" />
+      <app-form-field label="Apellido" placeholder="Apellido" icon="👤" [control]="apellidoControl" />
+    </div>
+
+    <app-form-field label="Correo"  placeholder="correo@ejemplo.com" icon="📧" [control]="correoControl" />
+    <app-form-field label="Celular" placeholder="Número de celular"  icon="📱" [control]="celularControl" />
+
+    @if (!existing) {
+      <app-form-field type="password" label="Contraseña" placeholder="Contraseña" icon="🔒" [control]="contrasenaControl" />
+    }
+
+    <app-dropdown-field-label
+      label="Organización"
+      icon="🏢"
+      [options]="orgLabels"
+      [formControl]="organizacionControl"
+    />
+
+    <app-dropdown-field-label
+      label="Rol"
+      icon="🔑"
+      [options]="rolLabels"
+      [formControl]="rolControl"
+    />
+
+    <!-- Toggle Activo / Inactivo: solo visible al editar un usuario existente -->
+    @if (existing) {
+      <div class="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+        <div class="flex items-center gap-2">
+          <div>
+            <p class="text-[13.5px] font-semibold text-slate-700">Estado del usuario</p>
+            <p class="text-[12px] text-slate-400">
+              {{ estaActivoControl.value ? 'El usuario puede iniciar sesión.' : 'El usuario no puede iniciar sesión.' }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Toggle switch -->
+        <button
+          type="button"
+          (click)="estaActivoControl.setValue(!estaActivoControl.value)"
+          class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none"
+          [class.bg-green-500]="estaActivoControl.value"
+          [class.bg-slate-300]="!estaActivoControl.value"
+        >
+          <span
+            class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-200"
+            [class.translate-x-6]="estaActivoControl.value"
+            [class.translate-x-1]="!estaActivoControl.value"
+          ></span>
+        </button>
+
+        <span
+          class="ml-3 min-w-[60px] text-center text-[12px] font-semibold px-2 py-0.5 rounded-full"
+          [class.bg-green-100]="estaActivoControl.value"
+          [class.text-green-700]="estaActivoControl.value"
+          [class.bg-red-100]="!estaActivoControl.value"
+          [class.text-red-600]="!estaActivoControl.value"
+        >
+          {{ estaActivoControl.value ? 'Activo' : 'Inactivo' }}
+        </span>
+      </div>
+    }
+
+    <app-button type="submit" (click)="submit()">
+      {{ existing ? 'Guardar cambios' : '+ Crear usuario' }}
+    </app-button>
+
+  </div>
+</app-dashboard-layout>

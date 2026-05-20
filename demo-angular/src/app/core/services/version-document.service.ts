@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CreateDocumentRequest, CreateDocumentVersion, DashboardStats, DocumentVersion, ResponseDocument } from '../models/document.model';
+import { CreateDocumentRequest, CreateDocumentVersion, DocumentVersion, ResponseDocument } from '../models/admin.model';
 
 @Injectable({ providedIn: 'root' })
 export class VersionService {

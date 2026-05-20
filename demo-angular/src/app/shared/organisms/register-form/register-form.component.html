@@ -7,12 +7,20 @@
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
-    <app-form-field
-      label="Nombre Completo"
-      placeholder="John Doe"
-      icon="👤"
-      [control]="f['fullName']"
-    />
+    <div class="grid grid-cols-2 gap-4">
+      <app-form-field
+        label="Nombre"
+        placeholder="Juan"
+        icon="👤"
+        [control]="f['nombre']"
+      />
+      <app-form-field
+        label="Apellido"
+        placeholder="Pérez"
+        icon="👤"
+        [control]="f['apellido']"
+      />
+    </div>
 
     <app-form-field
       label="Correo Electrónico"
@@ -20,6 +28,13 @@
       placeholder="ejemplo@cobalt.com"
       icon="@"
       [control]="f['email']"
+    />
+
+    <app-form-field
+      label="Celular"
+      placeholder="3123456789"
+      icon="📱"
+      [control]="f['celular']"
     />
 
     <app-form-field
@@ -38,16 +53,38 @@
       [control]="f['confirm']"
     />
 
-    <app-button type="submit" class="mt-2">
-      Registrarse →
+    <!-- Contraseñas no coinciden -->
+    @if (passwordMismatch) {
+      <p class="text-[12.5px] text-red-500 -mt-2">Las contraseñas no coinciden.</p>
+    }
+
+    <!-- Error de la API -->
+    @if (errorMsg) {
+      <div class="rounded-lg bg-red-50 border border-red-200 px-4 py-3
+                  text-[13px] text-red-600 font-medium flex items-center gap-2">
+        ⚠️ {{ errorMsg }}
+      </div>
+    }
+
+    <!-- Éxito -->
+    @if (successMsg) {
+      <div class="rounded-lg bg-green-50 border border-green-200 px-4 py-3
+                  text-[13px] text-green-700 font-medium flex items-center gap-2">
+        ✅ {{ successMsg }}
+      </div>
+    }
+
+    <app-button type="submit" class="mt-2" [attr.disabled]="loading || null">
+      {{ loading ? 'Creando cuenta...' : 'Registrarse →' }}
     </app-button>
 
   </form>
 
-  <!-- Link login -->
   <p class="text-center text-sm text-gray-500">
     ¿Ya tienes una cuenta?
-    <a href="#" class="text-brand-orange font-semibold hover:underline ml-1">Iniciar Sesión</a>
+    <a routerLink="/login" class="text-brand-orange font-semibold hover:underline ml-1">
+      Iniciar Sesión
+    </a>
   </p>
 
 </div>

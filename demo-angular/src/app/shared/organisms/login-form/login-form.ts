@@ -1,30 +1,80 @@
-import { Component } from '@angular/core';
-import { FormFieldComponent } from "../../molecules/form-field/form-field.component";
-import { ButtonComponent } from "../../atoms/yellow button/button.component";
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormFieldComponent } from '../../molecules/form-field/form-field.component';
+import { ButtonComponent } from '../../atoms/yellow button/button.component';
+import { UserService } from '../../../core/services/users.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login-form',
-  imports: [FormFieldComponent, ButtonComponent],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, FormFieldComponent, ButtonComponent],
   templateUrl: './login-form.html',
   styleUrl: './login-form.css',
 })
-export class LoginForm {
+export class LoginForm implements OnInit {
   form: FormGroup;
+  loading = false;
+  errorMsg = '';
 
-  //Constructor del formulario
-  constructor(private fb: FormBuilder) {
+  private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private authService: AuthService,
+    private router: Router,
+  ) {
     this.form = this.fb.group({
       email:    ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
-   onSubmit() {
-    if (this.form.valid) {
-      console.log('Formulario enviado:', this.form.value);
+  get f() {
+    return this.form.controls as any;
+  }
+
+  ngOnInit() {
+    // Solo redirigir si estamos en el browser y ya hay sesión activa
+    if (this.isBrowser && this.authService.isAuthenticated()) {
+      this.router.navigate(['/documents']);
     }
   }
 
-  get f() { return this.form.controls as any; }
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.loading = true;
+    this.errorMsg = '';
+
+    const { email, password } = this.form.value;
+
+    this.userService.login(email, password).subscribe({
+      next: (user) => {
+        // Usa AuthService en lugar de localStorage directo
+        this.authService.saveUser(user);
+        this.loading = false;
+        this.router.navigate(['/documents']);
+      },
+      error: (err) => {
+        this.loading = false;
+        if (err.status === 401) {
+          this.errorMsg = 'Contraseña incorrecta. Inténtalo de nuevo.';
+        } else if (err.status === 404) {
+          this.errorMsg = 'No existe una cuenta con ese correo.';
+        } else if (err.status === 500) {
+          this.errorMsg = 'Usuario inactivo';
+        } else {
+          this.errorMsg = 'Error al iniciar sesión. Inténtalo más tarde.';
+        }
+      },
+    });
+  }
 }

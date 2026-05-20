@@ -1,0 +1,59 @@
+<app-dashboard-layout placeholder="Buscar tipos..." [tabs]="tabs">
+  <div class="flex flex-col gap-6 animate-[fadeIn_0.3s_ease]">
+
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="font-(family-name:var(--font-display)) text-[26px] font-extrabold text-slate-800 tracking-tight mb-1">
+          Tipos de Proceso
+        </h1>
+        <p class="text-[13.5px] text-slate-500">Crea y gestiona los tipos de procesos disponibles.</p>
+      </div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col gap-4">
+      <h2 class="font-(family-name:var(--font-display)) text-[16px] font-bold text-slate-800">
+        {{ existing ? 'Editar tipo' : 'Nuevo tipo' }}
+      </h2>
+
+      <app-form-field label="Nombre" placeholder="Nombre del tipo" icon="⚙️" [control]="nombreControl" />
+      <app-form-field label="Descripción" placeholder="Descripción" icon="📄" [control]="descripcionControl" />
+
+      <div class="flex flex-col gap-2">
+        <p class="text-sm font-semibold text-slate-700">Requerimientos</p>
+        <div class="grid grid-cols-2 gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          @for (req of requerimientos; track $index) {
+            <app-checkbox
+              [label]="req.nombre"
+              [formControl]="$any(requerimientosForm.get(req.nombre))"
+            ></app-checkbox>
+          }
+        </div>
+      </div>
+
+      <app-file-field
+        label="PDF de instrucciones (opcional)"
+        accept=".pdf"
+        [multiple]="false"
+        (filesDropped)="onFileSelected($event)"
+      />
+
+      <app-button (click)="submit()">
+        {{ isUploading ? 'Guardando...' : existing ? 'Guardar cambios' : '+ Crear tipo' }}
+      </app-button>
+    </div>
+
+    <!-- Tabla -->
+    <app-documents-table
+      title="Tipos existentes"
+      [items]="tipos"
+      [total]="tipos.length"
+      [columns]="columns"
+      [isDocument]="false"
+      [isType]="false"
+      [isTypeP]="true"
+      [setValues]="setValues"
+    ></app-documents-table>
+
+  </div>
+</app-dashboard-layout>

@@ -1,0 +1,35 @@
+<app-dashboard-layout placeholder="Buscar plantillas..." [tabs]="tabs">
+  <div class="flex flex-col gap-6 animate-[fadeIn_0.3s_ease]">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="font-(family-name:var(--font-display)) text-[26px] font-extrabold text-slate-800 tracking-tight mb-1">
+          Plantillas
+        </h1>
+        <p class="text-[13.5px] text-slate-500">Selecciona un tipo de documento y sube su plantilla</p>
+      </div>
+    </div>
+
+    <app-dropdown-field-label
+      label="Tipo de documento"
+      icon="📁"
+      [options]="labels"
+      [formControl]="typeControl"
+    />
+
+    <app-form-field
+      label="Descripción"
+      [control]="descripcionControl"
+    />
+
+    <app-file-field
+      label="Archivo"
+      accept=".pdf,.doc,.docx"
+      [multiple]="false"
+      (filesDropped)="onFileSelected($event)"
+    />
+
+    <app-button type="submit" (click)="submit()">
+      {{ isUploading ? 'Subiendo...' : '+ Subir Plantilla' }}
+    </app-button>
+  </div>
+</app-dashboard-layout>

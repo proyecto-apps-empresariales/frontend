@@ -1,0 +1,27 @@
+<app-dashboard-layout placeholder="Buscar estados..." [tabs]="tabs">
+  <div class="flex flex-col gap-6 animate-[fadeIn_0.3s_ease]">
+
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="font-(family-name:var(--font-display)) text-[26px] font-extrabold text-slate-800 tracking-tight mb-1">
+          Estados de Proceso
+        </h1>
+        <p class="text-[13.5px] text-slate-500">Crea y gestiona los estados disponibles para los procesos.</p>
+      </div>
+    </div>
+
+
+    <!-- Tabla -->
+    <app-documents-table
+      title="Estados existentes"
+      [items]="estados"
+      [total]="estados.length"
+      [columns]="columns"
+      [isDocument]="false"
+      [isType]="false"
+      [isState]="true"
+      [setValues]="setValues"
+    ></app-documents-table>
+
+  </div>
+</app-dashboard-layout>

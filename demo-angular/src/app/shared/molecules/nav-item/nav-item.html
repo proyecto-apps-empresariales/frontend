@@ -1,18 +1,18 @@
 <a
-  class="relative flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-[13.5px] font-medium transition-all duration-150 cursor-pointer no-underline font-[family-name:var(--font-display)]"
-  [class.text-white]="active"
-  [class.font-semibold]="active"
-  [class.bg-white/10]="active"
-  [class.text-white/50]="!active"
-  [class.hover:bg-white/[0.08]]="!active"
-  [class.hover:text-white/90]="!active"
   [routerLink]="route"
+  class="relative flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-[13.5px] font-medium transition-all duration-150 cursor-pointer no-underline font-[family-name:var(--font-display)]"
+  [ngClass]="
+    active
+      ? 'text-white font-semibold bg-white/10'
+      : 'text-white/50 hover:bg-white/[0.08] hover:text-white/90'
+  "
 >
-  <span
-    *ngIf="active"
-    class="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-[#f5a623] rounded-r"
-  ></span>
-  <span class="text-base w-5 text-center flex-shrink-0" class="material-symbols-outlined">{{ icon }}</span>
+  @if (active) {
+    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-[#f5a623] rounded-r"></span>
+  }
+
+  <span class="text-base w-5 text-center flex-shrink-0" class="material-symbols-outlined">{{
+    icon
+  }}</span>
   <span>{{ label }}</span>
 </a>
-

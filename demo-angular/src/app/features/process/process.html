@@ -1,0 +1,31 @@
+<app-dashboard-layout placeholder="Buscar procesos..." [tabs]="tabs">
+  <div class="flex flex-col gap-6 animate-[fadeIn_0.3s_ease]">
+
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="font-(family-name:var(--font-display)) text-[26px] font-extrabold text-slate-800 tracking-tight mb-1">
+          Panel de Procesos
+        </h1>
+        <p class="text-[13.5px] text-slate-500">Gestiona y supervisa los procesos documentales.</p>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        
+        @if(user?.idRol!==6){
+          <app-button (click)="goToCreate()">+ Crear proceso</app-button>
+        }
+
+      </div>
+    </div>
+
+    <app-documents-table
+      title="Procesos"
+      [items]="procesos"
+      [total]="procesos.length"
+      [columns]="columns"
+      [isDocument]="false"
+      [isType]="false"
+      [isProcess]="true"
+    ></app-documents-table>
+
+  </div>
+</app-dashboard-layout>

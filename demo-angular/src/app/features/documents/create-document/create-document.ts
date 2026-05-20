@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DashboardLayoutComponent } from '../../../shared/templates/dashboard-layout/dashboard-layout.component';
 import { ButtonComponent } from '../../../shared/atoms/yellow button/button.component';
 import { FormFieldComponent } from '../../../shared/molecules/form-field/form-field.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DocumentService } from '../../../core/services/document.service';
 import { Router } from '@angular/router';
-import { CreateDocumentRequest, DocumentType } from '../../../core/models/document.model';
+import { CreateDocumentRequest, DocumentType } from '../../../core/models/admin.model';
 import { DocumentTypeService } from '../../../core/services/document-type.service';
 import { DropdownOption } from '../../../shared/atoms/dropdown-field/dropdown-field';
 import { DropdownFieldLabel } from "../../../shared/molecules/dropdown-field-label/dropdown-field-label";
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-create-document',
@@ -24,10 +25,13 @@ export class CreateDocument {
   labels: DropdownOption[] = [];
   tabs: { label: string; path: string }[] = [];
 
+  private authService = inject(AuthService);
+
   constructor(
     private docService: DocumentService,
     private router: Router,
     private typeService: DocumentTypeService,
+    
   ) {}
 
   ngOnInit() {
@@ -42,16 +46,17 @@ export class CreateDocument {
     });
 
     this.tabs = [
-      { label: 'docuCMB', path: '/docucmb' },
       { label: 'Explorar', path: `/documents` },
       { label: 'Crear', path: `/createdocuments` },
       { label: 'Versiones', path: `/versiondocuments` },
     ];
   }
 
+  
   submit() {
+    const user= this.authService.getCurrentUser();
     const payload: CreateDocumentRequest = {
-      usuarioCreador: 'camila@correo.com',
+      usuarioCreador: user!.correo,
       tipoDocumento: this.tipoControl.value ?? '',
       nombre: this.nombreControl.value ?? '',
       descripcion: this.descripcionControl.value ?? '',

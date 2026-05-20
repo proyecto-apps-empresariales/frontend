@@ -5,8 +5,7 @@
     <p class="text-gray-500 mt-1 text-sm">Complete los detalles para ingresar.</p>
   </div>
 
-  <form (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
 
     <app-form-field
       label="Correo Electrónico"
@@ -24,17 +23,25 @@
       [control]="f['password']"
     />
 
-    <app-button type="submit" class="mt-2">
-      Ingresar →
+    <!-- Mensaje de error de la API -->
+    @if (errorMsg) {
+      <div class="rounded-lg bg-red-50 border border-red-200 px-4 py-3
+                  text-[13px] text-red-600 font-medium flex items-center gap-2">
+        ⚠️ {{ errorMsg }}
+      </div>
+    }
+
+    <app-button type="submit" class="mt-2" [attr.disabled]="loading || null">
+      {{ loading ? 'Ingresando...' : 'Ingresar →' }}
     </app-button>
 
   </form>
 
-
-  <!-- Link login -->
   <p class="text-center text-sm text-gray-500">
     ¿No tienes cuenta?
-    <a href="#" class="text-brand-orange font-semibold hover:underline ml-1">Registrate</a>
+    <a routerLink="/register" class="text-brand-orange font-semibold hover:underline ml-1">
+      Registrate
+    </a>
   </p>
 
 </div>

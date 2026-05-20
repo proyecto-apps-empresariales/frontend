@@ -1,0 +1,24 @@
+<app-dashboard-layout placeholder="Buscar roles..." [tabs]="tabs">
+  <div class="flex flex-col gap-6 animate-[fadeIn_0.3s_ease]">
+
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="font-(family-name:var(--font-display)) text-[26px] font-extrabold text-slate-800 tracking-tight mb-1">
+          Panel de Roles
+        </h1>
+        <p class="text-[13.5px] text-slate-500">Gestiona los roles del sistema.</p>
+      </div>
+    </div>
+
+    <app-documents-table
+      title="Roles"
+      [items]="roles"
+      [total]="roles.length"
+      [columns]="columns"
+      [isDocument]="false"
+      [isType]="false"
+      [isRole]="true"
+    ></app-documents-table>
+
+  </div>
+</app-dashboard-layout>
