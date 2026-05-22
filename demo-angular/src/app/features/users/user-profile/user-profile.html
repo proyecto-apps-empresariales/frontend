@@ -6,7 +6,7 @@
       <!-- Avatar con iniciales -->
       <div class="w-14 h-14 rounded-full bg-yellow-400 flex items-center justify-center
                   text-xl font-extrabold text-white shadow-md select-none shrink-0">
-        {{ user ? (user.nombre[0] + user.apellido[0]) : '?' }}
+       {{ user ? ((user.nombre?.[0] ?? '') + (user.apellido?.[0] ?? '')) : '?' }}
       </div>
 
       <div>

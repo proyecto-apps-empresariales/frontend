@@ -7,9 +7,7 @@ import { ButtonComponent } from '../../../shared/atoms/yellow button/button.comp
 import { FormFieldComponent } from '../../../shared/molecules/form-field/form-field.component';
 import { DocumentsTableComponent, TableColumn } from '../../../shared/organisms/documents-table/documents-table.component';
 import { FirmaPeticionFlujo, HistorialPeticionFlujo, PeticionFlujo } from '../../../core/models/admin.model';
-import { RequestTypeService } from '../../../core/services/flow-request-extras.service';
 import { FlowRequestService } from '../../../core/services/flow-request.service';
-
 
 @Component({
   selector: 'app-detail-proceso',
@@ -30,12 +28,13 @@ export class DetailProcesoComponent implements OnInit {
   firmas: FirmaPeticionFlujo[] = [];
   observacionControl = new FormControl('');
   isFirming = false;
+  isChangingEstado = false;
 
   tabs = [
-    { label: 'Procesos',      path: '/process' },
-    { label: 'Crear',         path: '/createprocess' },
-    { label: 'Tipos',         path: '/typeprocess' },
-    { label: 'Estados',       path: '/stateprocess' },
+    { label: 'Procesos',  path: '/process' },
+    { label: 'Crear',     path: '/createprocess' },
+    { label: 'Tipos',     path: '/typeprocess' },
+    { label: 'Estados',   path: '/stateprocess' },
   ];
 
   historialColumns: TableColumn<HistorialPeticionFlujo>[] = [
@@ -70,17 +69,43 @@ export class DetailProcesoComponent implements OnInit {
   private loadHistorial() {
     if (!this.proceso) return;
     this.peticionService.getHistorial(this.proceso.id).subscribe({
-      next: (data) => { this.historial = data; this.cdr.detectChanges(); },
-      error: (err) => console.error('Error cargando historial:', err),
+      next: (data) => {
+        this.historial = Array.isArray(data) ? data : [];
+        this.cdr.detectChanges();
+      },
+      error: () => { this.historial = []; },
     });
   }
 
   private loadFirmas() {
     if (!this.proceso) return;
     this.peticionService.getFirmas(this.proceso.id).subscribe({
-      next: (data) => { this.firmas = data; this.cdr.detectChanges(); },
-      error: (err) => console.error('Error cargando firmas:', err),
+      next: (data) => {
+        this.firmas = Array.isArray(data) ? data : [];
+        this.cdr.detectChanges();
+      },
+      error: () => { this.firmas = []; },
     });
+  }
+
+  cambiarEstado(nuevoEstado: string) {
+    if (!this.proceso) return;
+    this.isChangingEstado = true;
+
+    this.peticionService.patch(this.proceso.id, { estado: nuevoEstado }).subscribe({
+      next: () => {
+        this.proceso = { ...this.proceso!, estado: nuevoEstado };
+        this.isChangingEstado = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.log('errors:', err.error.errors);
+        this.isChangingEstado = false;
+        console.error('Error al cambiar estado:', err);
+      },
+      
+    });
+    
   }
 
   firmar() {

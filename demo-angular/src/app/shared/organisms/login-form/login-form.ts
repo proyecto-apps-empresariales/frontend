@@ -17,7 +17,7 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class LoginForm implements OnInit {
   form: FormGroup;
-  loading = false;
+  loading  = false;
   errorMsg = '';
 
   private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
@@ -39,7 +39,6 @@ export class LoginForm implements OnInit {
   }
 
   ngOnInit() {
-    // Solo redirigir si estamos en el browser y ya hay sesión activa
     if (this.isBrowser && this.authService.isAuthenticated()) {
       this.router.navigate(['/documents']);
     }
@@ -51,15 +50,13 @@ export class LoginForm implements OnInit {
       return;
     }
 
-    this.loading = true;
+    this.loading  = true;
     this.errorMsg = '';
 
     const { email, password } = this.form.value;
 
     this.userService.login(email, password).subscribe({
-      next: (user) => {
-        // Usa AuthService en lugar de localStorage directo
-        this.authService.saveUser(user);
+      next: () => {
         this.loading = false;
         this.router.navigate(['/documents']);
       },
@@ -67,10 +64,10 @@ export class LoginForm implements OnInit {
         this.loading = false;
         if (err.status === 401) {
           this.errorMsg = 'Contraseña incorrecta. Inténtalo de nuevo.';
+        } else if (err.status === 403) {
+          this.errorMsg = 'Usuario inactivo o sin permisos.';
         } else if (err.status === 404) {
           this.errorMsg = 'No existe una cuenta con ese correo.';
-        } else if (err.status === 500) {
-          this.errorMsg = 'Usuario inactivo';
         } else {
           this.errorMsg = 'Error al iniciar sesión. Inténtalo más tarde.';
         }

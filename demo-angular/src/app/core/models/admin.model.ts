@@ -117,7 +117,7 @@ export interface User {
   correo: string;
   celular: string;
   fechaCreacion: string;
-  estaActivo: number;
+  estaActivo: boolean;
   idOrganizacion: number;
   nombreOrganizacion: string;
   idRol: number;
@@ -215,12 +215,13 @@ export interface CreatePeticionFlujo {
 }
 
 export interface UpdatePeticionFlujo {
-  destinatario: number;
-  documento: number;
-  tipoPeticion: number;
-  fechaFin: string;
-  descripcion: string;
-  nombre: string;
+  destinatario?: number;
+  documento?: number;
+  tipoPeticion?: number;
+  fechaFin?: string;
+  descripcion?: string;
+  nombre?: string;
+  estado?: string;
 }
 
 // ─── Firma Petición Flujo ─────────────────────────────────────────
