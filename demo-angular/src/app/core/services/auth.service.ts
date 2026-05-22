@@ -4,17 +4,36 @@ import { User } from '../models/admin.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly STORAGE_KEY = 'currentUser';
+  private readonly USER_KEY  = 'currentUser';
+  private readonly TOKEN_KEY = 'authToken';
   private readonly isBrowser: boolean;
 
   constructor() {
-    // isPlatformBrowser evita que localStorage explote en SSR (Node.js)
     this.isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  }
+
+  //  Token 
+
+  saveToken(token: string): void {
+    if (!this.isBrowser) return;
+    localStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+  getToken(): string | null {
+    if (!this.isBrowser) return null;
+    return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  //  Usuario 
+
+  saveUser(user: User): void {
+    if (!this.isBrowser) return;
+    localStorage.setItem(this.USER_KEY, JSON.stringify(user));
   }
 
   getCurrentUser(): User | null {
     if (!this.isBrowser) return null;
-    const raw = localStorage.getItem(this.STORAGE_KEY);
+    const raw = localStorage.getItem(this.USER_KEY);
     if (!raw) return null;
     try {
       return JSON.parse(raw) as User;
@@ -23,32 +42,29 @@ export class AuthService {
     }
   }
 
+  // Status 
+
   isAuthenticated(): boolean {
-    return this.getCurrentUser() !== null;
+    return this.getToken() !== null && this.getCurrentUser() !== null;
   }
 
   isAdmin(): boolean {
-    const user = this.getCurrentUser();
-    return user?.nombreRol?.toUpperCase() === 'ADMIN';
+    return this.getCurrentUser()?.nombreRol?.toUpperCase() === 'ADMIN';
   }
 
   isViewer(): boolean {
-    const user = this.getCurrentUser();
-    return user?.nombreRol?.toUpperCase() === 'VIEWER';
+    return this.getCurrentUser()?.nombreRol?.toUpperCase() === 'VIEWER';
   }
 
   isEditor(): boolean {
-    const user = this.getCurrentUser();
-    return user?.nombreRol?.toUpperCase() === 'EDITOR';
+    return this.getCurrentUser()?.nombreRol?.toUpperCase() === 'EDITOR';
   }
+
+  // Logout
 
   logout(): void {
     if (!this.isBrowser) return;
-    localStorage.removeItem(this.STORAGE_KEY);
-  }
-
-  saveUser(user: User): void {
-    if (!this.isBrowser) return;
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+    localStorage.removeItem(this.USER_KEY);
+    localStorage.removeItem(this.TOKEN_KEY);
   }
 }

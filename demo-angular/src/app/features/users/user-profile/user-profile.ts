@@ -43,9 +43,7 @@ export class UserProfileComponent implements OnInit {
   passwordSuccess = false;
   passwordError = '';
 
-  tabs = [
-    { label: 'Mi Perfil', path: '/editprofile' },
-  ];
+  tabs = [{ label: 'Mi Perfil', path: '/editprofile' }];
 
   constructor(
     private userService: UserService,
@@ -120,6 +118,8 @@ export class UserProfileComponent implements OnInit {
       contrasenaNueva: nueva,
       contrasenaConfirmacion: confirmacion,
     };
+    console.log('user:', this.user);
+    console.log('idUsuario:', this.user?.idUsuario);
 
     this.userService.updateContrasena(payload).subscribe({
       next: () => {
