@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DashboardLayoutComponent } from '../../../shared/templates/dashboard-layout/dashboard-layout.component';
@@ -8,10 +8,15 @@ import { ButtonComponent } from '../../../shared/atoms/yellow button/button.comp
 import { DropdownOption } from '../../../shared/atoms/dropdown-field/dropdown-field';
 import { DocumentService } from '../../../core/services/document.service';
 import { UserService } from '../../../core/services/users.service';
-import { PeticionFlujo, ResponseDocument, TipoPeticionFlujo, User } from '../../../core/models/admin.model';
+import {
+  PeticionFlujo,
+  ResponseDocument,
+  TipoPeticionFlujo,
+  User,
+} from '../../../core/models/admin.model';
 import { FlowRequestService } from '../../../core/services/flow-request.service';
 import { RequestTypeService } from '../../../core/services/flow-request-extras.service';
-
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-create-proceso',
@@ -28,12 +33,12 @@ import { RequestTypeService } from '../../../core/services/flow-request-extras.s
 export class CreateProcesoComponent implements OnInit {
   existing?: PeticionFlujo;
 
-  nombreControl      = new FormControl('');
+  nombreControl = new FormControl('');
   descripcionControl = new FormControl('');
-  fechaFinControl    = new FormControl('');
-  tipoControl        = new FormControl('');
+  fechaFinControl = new FormControl('');
+  tipoControl = new FormControl('');
   destinatarioControl = new FormControl('');
-  documentoControl   = new FormControl('');
+  documentoControl = new FormControl('');
 
   tipos: TipoPeticionFlujo[] = [];
   usuarios: User[] = [];
@@ -43,11 +48,16 @@ export class CreateProcesoComponent implements OnInit {
   usuarioLabels: DropdownOption[] = [];
   documentoLabels: DropdownOption[] = [];
 
-   tabs = [
-    { label: 'Procesos',      path: '/process' },
-    { label: 'Crear',         path: '/createprocess' },
-    { label: 'Tipos',         path: '/typeprocess' },
-    { label: 'Estados',       path: '/stateprocess' },
+  private authService = inject(AuthService);
+  isAdmin = this.authService.isAdmin();
+  isViewer = this.authService.isViewer();
+  user = this.authService.getCurrentUser();
+
+  tabs = [
+    { label: 'Procesos', path: '/process' },
+    ...(!this.isViewer ? [{ label: 'Crear/Editar', path: '/createprocess' }] : []),
+    ...(this.isAdmin ? [{ label: 'Tipos', path: '/typeprocess' }] : []),
+    ...(this.isAdmin ? [{ label: 'Estados', path: '/stateprocess' }] : []),
   ];
 
   constructor(
@@ -96,8 +106,11 @@ export class CreateProcesoComponent implements OnInit {
           value: String(u.idUsuario),
         }));
         if (this.existing) {
-          const match = data.find((u) => `${u.nombre} ${u.apellido}` === this.existing!.destinatario);
-          if (match) this.destinatarioControl.setValue(String(match.idUsuario), { emitEvent: false });
+          const match = data.find(
+            (u) => `${u.nombre} ${u.apellido}` === this.existing!.destinatario,
+          );
+          if (match)
+            this.destinatarioControl.setValue(String(match.idUsuario), { emitEvent: false });
         }
         this.cdr.detectChanges();
       },
@@ -108,11 +121,11 @@ export class CreateProcesoComponent implements OnInit {
     if (this.existing) {
       const payload = {
         destinatario: Number(this.destinatarioControl.value),
-        documento:    Number(this.documentoControl.value),
+        documento: Number(this.documentoControl.value),
         tipoPeticion: Number(this.tipoControl.value),
-        fechaFin:     this.fechaFinControl.value ?? '',
-        descripcion:  this.descripcionControl.value ?? '',
-        nombre:       this.nombreControl.value ?? '',
+        fechaFin: this.fechaFinControl.value ?? '',
+        descripcion: this.descripcionControl.value ?? '',
+        nombre: this.nombreControl.value ?? '',
       };
 
       this.peticionService.patch(this.existing.id, payload).subscribe({
@@ -120,24 +133,24 @@ export class CreateProcesoComponent implements OnInit {
         error: (err) => console.error('Error al actualizar proceso:', err),
       });
 
-      console.log(payload)
+      console.log(payload);
     } else {
+      const user= this.authService.getCurrentUser();
       const payload = {
-        remitente:    1, // TODO: reemplazar con usuario autenticado
+        remitente: user!.idUsuario,
         destinatario: Number(this.destinatarioControl.value),
-        documento:    Number(this.documentoControl.value),
+        documento: Number(this.documentoControl.value),
         tipoPeticion: Number(this.tipoControl.value),
-        fechaFin:     this.fechaFinControl.value ?? '',
-        descripcion:  this.descripcionControl.value ?? '',
-        nombre:       this.nombreControl.value ?? '',
+        fechaFin: this.fechaFinControl.value ?? '',
+        descripcion: this.descripcionControl.value ?? '',
+        nombre: this.nombreControl.value ?? '',
       };
 
       this.peticionService.post(payload).subscribe({
         next: () => this.router.navigate(['/process']),
         error: (err) => console.error('Error al crear proceso:', err),
       });
-      console.log(payload)
+      console.log(payload);
     }
-
   }
 }

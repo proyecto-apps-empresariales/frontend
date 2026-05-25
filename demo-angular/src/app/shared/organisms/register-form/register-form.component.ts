@@ -76,7 +76,7 @@ export class RegisterFormComponent {
       contrasena:     this.form.value.password,
       celular:        this.form.value.celular,
       idOrganizacion: 1,
-      idRol:          5,
+      idRol:          6,
     };
 
     this.userService.post(payload).subscribe({

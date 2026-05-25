@@ -23,106 +23,39 @@ import { UserProfileComponent } from './features/users/user-profile/user-profile
 // Guards
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
+import { editorGuard } from './core/guards/editor.guard';
+import { editorOrAdminGuard } from './core/guards/editor-guard.guard';
 
 export const routes: Routes = [
+
   //  Públicas 
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'register', component: RegisterComponent },
 
-  //  USER + ADMIN: acceso permitido a ambos roles 
-  {
-    path: 'documents',
-    component: DocumentsPageComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'createdocuments',
-    component: CreateDocument,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'versiondocuments',
-    component: VersionDocument,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'process',
-    component: ProcesosComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'detailprocess',
-    component: DetailProcesoComponent,
-    canActivate: [authGuard],
-  },
-  {
-    path: 'editprofile',
-    component: UserProfileComponent,
-    canActivate: [authGuard],
-  },
-    {
-    path: 'createprocess',
-    component: CreateProcesoComponent,
-    canActivate: [adminGuard],
-  },
-  {
-    // USER puede ver plantillas pero NO crearlas
-    path: 'templates',
-    component: Templates,
-    canActivate: [authGuard],
-  },
+    // VIEWER + EDITOR + ADMIN
+  { path: 'documents',      component: DocumentsPageComponent, canActivate: [authGuard] },
+  { path: 'versiondocuments', component: VersionDocument,      canActivate: [authGuard] },
+  { path: 'process',        component: ProcesosComponent,      canActivate: [authGuard] },
+  { path: 'detailprocess',  component: DetailProcesoComponent, canActivate: [authGuard] },
+  { path: 'templates',      component: Templates,              canActivate: [authGuard] },
+  { path: 'editprofile',    component: UserProfileComponent,   canActivate: [authGuard] },
 
-  //  Solo ADMIN 
-  {
-    path: 'documentstypes',
-    component: DocumentTypeComponent,
-    canActivate: [adminGuard],
-  },
-  {
-    path: 'createtype',
-    component: CreateDocumentType,
-    canActivate: [adminGuard],
-  },
-  {
-    path: 'createtemplates',
-    component: CreateTemplates,
-    canActivate: [adminGuard],
-  },
-  {
-    path: 'organizations',
-    component: OrganizationsComponent,
-    canActivate: [adminGuard],
-  },
-  {
-    path: 'createorganization',
-    component: CreateOrganizationComponent,
-    canActivate: [adminGuard],
-  },
-  {
-    path: 'roles',
-    component: RolesComponent,
-    canActivate: [adminGuard],
-  },
-  {
-    path: 'users',
-    component: UsersComponent,
-    canActivate: [adminGuard],
-  },
-  {
-    path: 'createuser',
-    component: CreateUserComponent,
-    canActivate: [adminGuard],
-  },
-  {
-    path: 'typeprocess',
-    component: TiposProcesoComponent,
-    canActivate: [adminGuard],
-  },
-  {
-    path: 'stateprocess',
-    component: EstadosProcesoComponent,
-    canActivate: [adminGuard],
-  },
+  // EDITOR + ADMIN
+  { path: 'createdocuments', component: CreateDocument,      canActivate: [editorOrAdminGuard] },
+  { path: 'createprocess',   component: CreateProcesoComponent, canActivate: [editorOrAdminGuard] },
+
+  //Solo ADMIN
+  { path: 'documentstypes',     component: DocumentTypeComponent,      canActivate: [adminGuard] },
+  { path: 'createtype',         component: CreateDocumentType,         canActivate: [adminGuard] },
+  { path: 'createtemplates',    component: CreateTemplates,            canActivate: [adminGuard] },
+  { path: 'organizations',      component: OrganizationsComponent,     canActivate: [adminGuard] },
+  { path: 'createorganization', component: CreateOrganizationComponent, canActivate: [adminGuard] },
+  { path: 'roles',              component: RolesComponent,             canActivate: [adminGuard] },
+  { path: 'users',              component: UsersComponent,             canActivate: [adminGuard] },
+  { path: 'createuser',         component: CreateUserComponent,        canActivate: [adminGuard] },
+  { path: 'typeprocess',        component: TiposProcesoComponent,      canActivate: [adminGuard] },
+  { path: 'stateprocess',       component: EstadosProcesoComponent,    canActivate: [adminGuard] },
+
   { path: '**', redirectTo: 'login' },
 ];

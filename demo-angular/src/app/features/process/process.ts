@@ -27,7 +27,7 @@ export class ProcesosComponent implements OnInit {
     { label: 'Procesos', path: '/process' },
     ...(!this.isViewer ? [{ label: 'Crear/Editar', path: '/createprocess' }] : []),
     ...(this.isAdmin? [{ label: 'Tipos', path: '/typeprocess' }] : []),
-    ...(!this.isViewer ? [{ label: 'Estados', path: '/stateprocess' }] : []),
+    ...(this.isAdmin? [{ label: 'Estados', path: '/stateprocess' }] : []),
   ];
 
   columns: TableColumn<PeticionFlujo>[] = [
