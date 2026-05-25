@@ -85,6 +85,7 @@ export class DetailProcesoComponent implements OnInit {
       next: (data) => {
         this.historial = Array.isArray(data) ? data : [];
         this.cdr.detectChanges();
+        console.log('Historial cargado:', this.historial);
       },
       error: () => {
         this.historial = [];

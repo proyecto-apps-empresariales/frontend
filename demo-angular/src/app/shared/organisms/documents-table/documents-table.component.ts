@@ -31,6 +31,7 @@ export class DocumentsTableComponent<T> {
   @Input() isState:boolean = false;
   @Input() isTypeP:boolean = false;
   @Input() isProcess:boolean = false;
+  @Input() isHistorial:boolean = false;
   @Input() setValues?: (doc: any) => void;
 
 

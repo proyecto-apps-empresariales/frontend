@@ -38,7 +38,7 @@ export class FlowRequestService {
   }
 
   getHistorial(id: number): Observable<HistorialPeticionFlujo[]> {
-    return this.http.get<HistorialPeticionFlujo[]>(`${this.url}/historial/${id}`).pipe(
+    return this.http.get<HistorialPeticionFlujo[]>(`${this.url}/historial/peticion/${id}`).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 404) return of([]);
         throw error; // otros errores sí se propagan
