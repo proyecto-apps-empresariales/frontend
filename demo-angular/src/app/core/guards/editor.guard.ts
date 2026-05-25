@@ -2,8 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-
-export const adminGuard: CanActivateFn = () => {
+export const editorGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
@@ -11,10 +10,10 @@ export const adminGuard: CanActivateFn = () => {
     return router.createUrlTree(['/login']);
   }
 
-  if (auth.isAdmin()) {
+  if (auth.isEditor()) {
     return true;
   }
 
-  // Usuario autenticado pero sin permisos de admin
+  // Usuario autenticado pero sin permisos de editor
   return router.createUrlTree(['/documents']);
 };

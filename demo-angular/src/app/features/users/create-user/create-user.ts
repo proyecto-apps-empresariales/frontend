@@ -61,7 +61,6 @@ export class CreateUserComponent implements OnInit {
       this.apellidoControl.setValue(state.document.apellido ?? '');
       this.correoControl.setValue(state.document.correo ?? '');
       this.celularControl.setValue(state.document.celular ?? '');
-      // Inicializar estaActivo: el modelo lo guarda como number (1/0)
       this.estaActivoControl.setValue(state.document.estaActivo);
     }
 
