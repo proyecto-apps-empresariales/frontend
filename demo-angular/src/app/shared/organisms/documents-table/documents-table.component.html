@@ -9,7 +9,7 @@
 
   <div class="flex-1 overflow-y-auto divide-y divide-slate-100">
     @for (doc of items; track $index) {
-      <app-document-item [isProcess]="isProcess" [isTypeP]="isTypeP" [setValues]="setValues" [isState]="isState" [isRole]="isRole" [isOrganization]="isOrganization" [isUser]="isUser" [doc]="doc" [isDocument]="isDocument" [isType]="isType" [isTemplate]="isTemplate" [isVersion]="isVersion" />
+      <app-document-item [isHistorial]="isHistorial" [isProcess]="isProcess" [isTypeP]="isTypeP" [setValues]="setValues" [isState]="isState" [isRole]="isRole" [isOrganization]="isOrganization" [isUser]="isUser" [doc]="doc" [isDocument]="isDocument" [isType]="isType" [isTemplate]="isTemplate" [isVersion]="isVersion" />
     } @empty {
       <p class="text-center text-slate-400 text-xs py-10">Sin resultados</p>
     }

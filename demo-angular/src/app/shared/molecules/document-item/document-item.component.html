@@ -19,24 +19,40 @@
       </span>
     }
 
-    @if (isOrganization || isVersion || isDocument || isUser || isProcess) {
+    @if (isOrganization || isVersion || isDocument || isUser || isProcess || isHistorial) {
       <div class="flex items-center gap-3 flex-wrap">
         <span class="text-[11.5px] text-slate-400"
-          >📅 {{ doc.fechaCreacion || doc.fechaActualizacion || doc.fechaFin }}</span
+          >📅 {{ doc.fechaCreacion || doc.fechaActualizacion || doc.fechaFin || doc.fecha }}</span
         >
       </div>
     }
   </div>
+  @if (isHistorial) {
+    <div class="flex-1 min-w-0">
+      <p
+        class="font-semibold text-[13.5px] text-slate-800 font-[family-name:var(--font-display)] whitespace-nowrap overflow-hidden text-ellipsis mb-1 text-end"
+      >
+        Descripcion:
+      </p>
+      <p
+        class="font-semibold text-[13.5px] text-slate-500 font-[family-name:var(--font-display)] whitespace-nowrap overflow-hidden text-ellipsis mb-1 text-end"
+      >
+        {{ doc.descripcion }}
+      </p>
+    </div>
+  }
 
   <div class="flex flex-col items-end gap-0.5 flex-shrink-0 min-w-[100px]">
-    @if (isDocument || isVersion || isProcess) {
+    @if (isDocument || isVersion || isProcess || isHistorial) {
       <span class="text-[9px] font-bold uppercase tracking-[0.8px] text-slate-400"
         >Responsable</span
       >
     }
     <span
       class="text-[12.5px] font-semibold text-slate-800 font-[family-name:var(--font-display)]"
-      >{{ doc.usuarioCreador || doc.usuarioActualizador || doc.remitente }}</span
+      >{{
+        doc.usuarioCreador || doc.usuarioActualizador || doc.remitente || doc.usuarioEditor
+      }}</span
     >
     @if (isProcess) {
       <span class="text-[9px] font-bold uppercase tracking-[0.8px] text-slate-400"
@@ -44,7 +60,7 @@
       >
     }
     <span
-      class="text-[12.5px] font-semibold text-slate-800 font-[family-name:var(--font-display)]"
+      class="text-[12.5px] font-semibold text-slate-800 font-[family-name:var(--font-display)] justify-start"
       >{{ doc.destinatario }}</span
     >
   </div>
@@ -119,6 +135,20 @@
       >
         🔍
       </button>
+
+      <span
+        class="text-[11.5px] font-medium px-2.5 py-1 rounded-lg"
+        [ngClass]="{
+          'text-slate-600  bg-slate-100': doc.estado === 'CREADO',
+          'text-blue-600   bg-blue-50': doc.estado === 'EN-REVISION',
+          'text-green-600  bg-green-50': doc.estado === 'APROBADO',
+          'text-red-600    bg-red-50': doc.estado === 'RECHAZADO',
+          'text-purple-600 bg-purple-50': doc.estado === 'FIRMADO',
+          'text-emerald-600 bg-emerald-50': doc.estado === 'FINALIZADO',
+        }"
+      >
+        {{ doc.estado }}
+      </span>
     }
 
     @if (isTemplate && isAdmin) {
