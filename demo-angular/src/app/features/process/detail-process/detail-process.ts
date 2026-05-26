@@ -38,12 +38,15 @@ export class DetailProcesoComponent implements OnInit {
   isFirming = false;
   isChangingEstado = false;
   private authService = inject(AuthService);
+  isAdmin = this.authService.isAdmin();
+  isViewer = this.authService.isViewer();
+  user = this.authService.getCurrentUser();
 
   tabs = [
     { label: 'Procesos', path: '/process' },
-    { label: 'Crear', path: '/createprocess' },
-    { label: 'Tipos', path: '/typeprocess' },
-    { label: 'Estados', path: '/stateprocess' },
+    ...(!this.isViewer ? [{ label: 'Crear/Editar', path: '/createprocess' }] : []),
+    ...(this.isAdmin ? [{ label: 'Tipos', path: '/typeprocess' }] : []),
+    ...(this.isAdmin ? [{ label: 'Estados', path: '/stateprocess' }] : []),
   ];
 
   historialColumns: TableColumn<HistorialPeticionFlujo>[] = [

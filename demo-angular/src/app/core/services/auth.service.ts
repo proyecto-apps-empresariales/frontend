@@ -13,7 +13,6 @@ export class AuthService {
   }
 
   //  Token 
-
   saveToken(token: string): void {
     if (!this.isBrowser) return;
     localStorage.setItem(this.TOKEN_KEY, token);
@@ -25,7 +24,6 @@ export class AuthService {
   }
 
   //  Usuario 
-
   saveUser(user: User): void {
     if (!this.isBrowser) return;
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));

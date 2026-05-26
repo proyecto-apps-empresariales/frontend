@@ -5,12 +5,18 @@ import { DashboardLayoutComponent } from '../../../shared/templates/dashboard-la
 import { FormFieldComponent } from '../../../shared/molecules/form-field/form-field.component';
 import { ButtonComponent } from '../../../shared/atoms/yellow button/button.component';
 import { CheckboxComponent } from '../../../shared/atoms/checkbox/checkbox';
-import { DocumentsTableComponent, TableColumn } from '../../../shared/organisms/documents-table/documents-table.component';
+import {
+  DocumentsTableComponent,
+  TableColumn,
+} from '../../../shared/organisms/documents-table/documents-table.component';
 
 import { FileField } from '../../../shared/atoms/file-field/file-field';
 import { UploadService } from '../../../core/services/upload.service';
 import { RequerimientoPeticion, TipoPeticionFlujo } from '../../../core/models/admin.model';
-import { RequestRequirementService, RequestTypeService } from '../../../core/services/flow-request-extras.service';
+import {
+  RequestRequirementService,
+  RequestTypeService,
+} from '../../../core/services/flow-request-extras.service';
 
 @Component({
   selector: 'app-tipos-proceso',
@@ -34,18 +40,18 @@ export class TiposProcesoComponent implements OnInit {
   selectedFile?: File;
   isUploading = false;
 
-  nombreControl      = new FormControl('');
+  nombreControl = new FormControl('');
   descripcionControl = new FormControl('');
 
   tabs = [
-    { label: 'Procesos',      path: '/process' },
-    { label: 'Crear',         path: '/createprocess' },
-    { label: 'Tipos',         path: '/typeprocess' },
-    { label: 'Estados',       path: '/stateprocess' },
+    { label: 'Procesos', path: '/process' },
+    { label: 'Crear', path: '/createprocess' },
+    { label: 'Tipos', path: '/typeprocess' },
+    { label: 'Estados', path: '/stateprocess' },
   ];
 
   columns: TableColumn<TipoPeticionFlujo>[] = [
-    { header: 'Nombre',      field: 'nombre' },
+    { header: 'Nombre', field: 'nombre' },
     { header: 'Descripción', field: 'descripcion' },
   ];
 
@@ -66,7 +72,10 @@ export class TiposProcesoComponent implements OnInit {
     }
 
     this.tipoService.getAll().subscribe({
-      next: (data) => { this.tipos = data; this.cdr.detectChanges(); },
+      next: (data) => {
+        this.tipos = data;
+        this.cdr.detectChanges();
+      },
     });
 
     this.requerimientoService.getAll().subscribe({
@@ -95,7 +104,7 @@ export class TiposProcesoComponent implements OnInit {
     this.router.navigate(['/tiposproceso'], { state: { document: tipo } });
   }
 
-    setValues = (doc:any): void => {
+  setValues = (doc: any): void => {
     if (doc) {
       this.existing = doc;
       this.nombreControl.setValue(doc.nombre ?? '');
@@ -106,10 +115,10 @@ export class TiposProcesoComponent implements OnInit {
   submit() {
     const doSubmit = (instruccionesPdf?: string) => {
       const payload = {
-        nombre:          this.nombreControl.value ?? '',
-        descripcion:     this.descripcionControl.value ?? '',
+        nombre: this.nombreControl.value ?? '',
+        descripcion: this.descripcionControl.value ?? '',
         instruccionesPdf: instruccionesPdf ?? this.existing?.instruccionesPdf ?? '',
-        requerimientos:  this.getSelectedRequerimientos(),
+        requerimientos: this.getSelectedRequerimientos(),
       };
 
       const request$ = this.existing
@@ -119,12 +128,21 @@ export class TiposProcesoComponent implements OnInit {
       request$.subscribe({
         next: () => {
           this.isUploading = false;
-          this.tipoService.getAll().subscribe({ next: (data) => { this.tipos = data; this.cdr.detectChanges(); } });
+          this.tipoService.getAll().subscribe({
+            next: (data) => {
+              this.tipos = data;
+              this.cdr.detectChanges();
+            },
+          });
           this.existing = undefined;
           this.nombreControl.setValue('');
           this.descripcionControl.setValue('');
         },
-        error: (err) => { this.isUploading = false; console.error('Error:', err); },
+        error: (err) => {
+          this.isUploading = false;
+          console.error('errors:', err.error.errors);
+          console.error('Error:', err);
+        },
       });
     };
 
@@ -132,7 +150,10 @@ export class TiposProcesoComponent implements OnInit {
       this.isUploading = true;
       this.uploadService.uploadFile(this.selectedFile).subscribe({
         next: (url) => doSubmit(url),
-        error: (err) => { this.isUploading = false; console.error('Error subiendo archivo:', err); },
+        error: (err) => {
+          this.isUploading = false;
+          console.error('Error subiendo archivo:', err);
+        },
       });
     } else {
       doSubmit();

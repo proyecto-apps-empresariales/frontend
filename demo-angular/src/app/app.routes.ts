@@ -24,7 +24,7 @@ import { UserProfileComponent } from './features/users/user-profile/user-profile
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { editorGuard } from './core/guards/editor.guard';
-import { editorOrAdminGuard } from './core/guards/editor-guard.guard';
+import { editorOrAdminGuard } from './core/guards/editor-admin.guard';
 
 export const routes: Routes = [
 

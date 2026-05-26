@@ -6,7 +6,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth  = inject(AuthService);
   const token = auth.getToken();
 
-  if (!token) {
+   const isExternal = !req.url.startsWith('http://localhost:8080');
+
+  if (!token || isExternal) {
     return next(req);
   }
 

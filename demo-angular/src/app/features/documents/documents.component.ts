@@ -57,12 +57,7 @@ export class DocumentsPageComponent implements OnInit, OnDestroy {
   private loadDocuments() {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    const source$ =
-      this.isAdmin || this.authService.getCurrentUser()?.idRol === 6
-        ? this.docService.getAllRecentDocuments()
-        : this.user?.correo
-          ? this.docService.getDocumentsByUsuario(this.user.correo)
-          : null;
+    const source$ =this.docService.getAllRecentDocuments();
 
     if (!source$) return;
 
